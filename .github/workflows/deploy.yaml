@@ -7,7 +7,7 @@ on:
 
 env:
   Registry-Name: landair
-  App-Name: LiveStream
+  App-Name: livestream
 
 jobs:
   build:
