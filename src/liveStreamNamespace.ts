@@ -40,7 +40,6 @@ export const setupDeviceStatusNamespace = (io: SocketIOServer) => {
   });
 };
 
-// פונקציה לעדכון הסטטוס ב-DB דרך ה-API
 async function updateDeviceStatusInDB(deviceId: string, status: string): Promise<void> {
   const url = `http://localhost:8080/api/device/${deviceId}`;
   try {
@@ -49,7 +48,12 @@ async function updateDeviceStatusInDB(deviceId: string, status: string): Promise
     const response = await axios.put(url, { status });
     console.log(`Device ${deviceId} status updated to ${status}`);
     console.log(response.data);
-  } catch (error) {
-    console.error(`Failed to update device ${deviceId} status: ${error.message}`);
+  } catch (error: unknown) { // הגדרת טיפוס של 'unknown' כדי לבדוק אותו
+    if (error instanceof Error) { // בדיקה אם error הוא אובייקט מסוג Error
+      console.error(`Failed to update device ${deviceId} status: ${error.message}`);
+    } else {
+      console.error(`Failed to update device ${deviceId} status: Unknown error`);
+    }
   }
 }
+
