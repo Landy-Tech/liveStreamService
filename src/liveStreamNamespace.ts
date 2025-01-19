@@ -6,7 +6,7 @@ const deviceStatusMap = new Map<string, boolean>();
 const socketToDeviceMap = new Map<string, string>();
 
 // URL של ה-API לעדכון הסטטוס
-const DEVICE_API_URL = "http://localhost:8080/api/device";
+const DEVICE_API_URL = "api-service-hab9fmgne7dxa5ad.italynorth-01.azurewebsites.net/api/device";
 
 export const setupDeviceStatusNamespace = (io: SocketIOServer) => {
   io.of('/deviceStatus').on('connection', (socket: Socket) => {
@@ -41,7 +41,7 @@ export const setupDeviceStatusNamespace = (io: SocketIOServer) => {
 };
 
 async function updateDeviceStatusInDB(deviceId: string, status: string): Promise<void> {
-  const url = `http://localhost:8080/api/device/${deviceId}`;
+  const url = `api-service-hab9fmgne7dxa5ad.italynorth-01.azurewebsites.net/api/device/${deviceId}`;
   try {
     console.log(url);
     console.log(status);
