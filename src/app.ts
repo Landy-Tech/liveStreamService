@@ -15,11 +15,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// בדיקת חיבור
-// app.get("/ping", (req, res) => res.send("pong"));
 
 // הגדרת סטטיקת קבצים
 app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+app.get('/ping', (req, res) => {
+  // logger.info('Ping call')
+  res.send('pong')
+})
 
 // יצירת שרת HTTP
 const server = http.createServer(app);
@@ -36,10 +39,11 @@ const io = new SocketIOServer(server, {
 setupDeviceStatusNamespace(io); // Namespace למכשירים
 setupDeviceLiveStreamNamespace(io); // Namespace לפרונטנד
 
+// ייצוא io לשימוש חיצוני
+export { io };
+
 // הפעלת השרת
 server.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
-// ייצוא io לשימוש חיצוני
-export { io };
