@@ -6,7 +6,6 @@ export const setupDeviceLiveStreamNamespace = (io: SocketIOServer) => {
   io.of('/deviceLiveStream').on('connection', (socket: Socket) => {
     console.log(`Socket connected to /deviceLiveStream: ${socket.id}`);
 
-    // כאשר לקוח מצטרף לשידור חי של מכשיר
     socket.on('joinLiveStream', (deviceId: string) => {
       console.log(`Client ${socket.id} joined live stream for device ${deviceId}`);
       if (!clientConnections.has(deviceId)) {
@@ -15,16 +14,22 @@ export const setupDeviceLiveStreamNamespace = (io: SocketIOServer) => {
       clientConnections.get(deviceId)?.push(socket);
     });
 
-    // כאשר מתקבלת תמונה מהמכשיר
     socket.on('liveImage', ({ deviceId, image }) => {
-      // console.log(`Received image from device ${deviceId}`);
+      console.log(`Received image from device ${deviceId}, image size: ${image.length} bytes`);
+      
+      if (!image || typeof image !== 'string') {
+        console.error("Error: Invalid image format received");
+        return;
+      }
+
       const clients = clientConnections.get(deviceId) || [];
       clients.forEach((client) => {
         client.emit('liveImage', { image, status: 'Active' });
       });
+
+      console.log(`Forwarded image to ${clients.length} clients`);
     });
 
-    // כאשר לקוח מתנתק
     socket.on('disconnect', () => {
       console.log(`Socket disconnected from /deviceLiveStream: ${socket.id}`);
       clientConnections.forEach((clients, deviceId) => {
