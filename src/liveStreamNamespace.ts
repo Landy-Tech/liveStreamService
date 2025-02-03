@@ -42,6 +42,7 @@ export const setupDeviceStatusNamespace = (io: SocketIOServer) => {
 
 async function updateDeviceStatusInDB(deviceId: string, status: string): Promise<void> {
   const url = `https://api-service-hab9fmgne7dxa5ad.italynorth-01.azurewebsites.net/api/device/${deviceId}`;
+
   try {
     console.log(url);
     console.log(status);
