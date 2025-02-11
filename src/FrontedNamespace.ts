@@ -17,14 +17,11 @@ export const setupDeviceLiveStreamNamespace = (io: SocketIOServer) => {
 
     // קבלת תמונה מהלקוח
     socket.on('liveImage', ({ deviceId, image }) => {
-      console.log(`📸 Received image from device ${deviceId}`);
-
       if (!image || typeof image !== 'string') {
         console.error("❌ Error: Invalid image format received");
         return;
       }
 
-      console.log(`🔍 Image Base64 sample (first 100 chars): ${image.substring(0, 100)}...`);
       console.log(`📏 Image size: ${image.length} bytes`);
 
       const clients = clientConnections.get(deviceId) || [];
